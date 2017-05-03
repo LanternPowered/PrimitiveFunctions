@@ -1,0 +1,49 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.13.1"
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'com.github.hierynomus.license'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+group = 'org.lanternpowered'
+archivesBaseName = project.name.toLowerCase()
+version = '1.0.0-SNAPSHOT'
+
+processResources {
+    from 'LICENSE.txt'
+}
+
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+assemble.dependsOn sourceJar
+
+license {
+    header project.file('HEADER.txt')
+    sourceSets = project.sourceSets
+    include '**/*.java'
+
+    strictCheck true
+    ignoreFailures = false
+
+    ext {
+        name = project.name
+        url = project.url
+        organization = project.organization
+    }
+
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
+
+// Gradle version used for generating the Gradle wrapper
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5'
+}
